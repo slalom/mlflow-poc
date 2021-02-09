@@ -30,24 +30,14 @@ import mlflow
 @click.option("--test-ratio", type=click.FLOAT, default=0.2)
 def run(training_data, test_ratio, epochs, batch_size, image_width, image_height, seed):
     mlflow.set_tracking_uri("http://localhost:5000")
-    image_files = []
-    domain = {}
     print("tf.__version__ " + tf.__version__)
     print("Training model with the following parameters:")
     for param, value in locals().items():
-        print("  ", param, "=", value)
+        print("  ", param, "=", value)  
 
-    data_dir="./flower_photos"    
-
-    if training_data == "./flower_photos" and not os.path.exists(training_data):
-        print("download_input")
-        print("Input data not found, attempting to download the data from the web.")
-        dataset_url = "https://storage.googleapis.com/download.tensorflow.org/example_images/flower_photos.tgz"
-        data_dir = tf.keras.utils.get_file('flower_photos', origin=dataset_url, untar=True)
-        data_dir = pathlib.Path(data_dir)
-        image_count = len(list(data_dir.glob('*/*.jpg')))
-        print("image count: " + str(image_count))
-
+    data_dir = pathlib.Path(training_data)
+    image_count = len(list(data_dir.glob('./flower_photos/*.jpg')))
+    print("image count: " + str(image_count))
 
     train_ds = tf.keras.preprocessing.image_dataset_from_directory(
         data_dir,
@@ -69,12 +59,12 @@ def run(training_data, test_ratio, epochs, batch_size, image_width, image_height
     AUTOTUNE = tf.data.AUTOTUNE
     train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
     val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
-    #standardize dataset
-    normalization_layer = layers.experimental.preprocessing.Rescaling(1./255)
+
     model = _create_model(classes=len(class_names))
     model.compile(optimizer='adam',
                 loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                 metrics=['accuracy'])
+    model.summary()
     model.fit(
     train_ds,
     validation_data=val_ds,
@@ -173,7 +163,7 @@ def _create_model(classes):
     layers.MaxPooling2D(),
     layers.Dropout(0.2),
     layers.Flatten(),
-    layers.Dense(128, activation='relu'),
+    layers.Dense(128, activation='softmax'),
     layers.Dense(num_classes)
     ])
     return model

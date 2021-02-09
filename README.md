@@ -1,13 +1,4 @@
-## How To Train and Deploy Image Classifier with MLflow and Keras
-
-In this example we demonstrate how to train and deploy image classification models with MLflow.
-We train a deep learning model to classify flower species from photos using a `dataset <http://download.tensorflow.org/example_images/flower_photos.tgz>`_ available from `tensorflow.org <http://www.tensorflow.org>`_. Note that although we use Keras to train the model in this case,
-a similar approach can be applied to other deep learning frameworks such as `PyTorch`.
-
-In order to include custom image pre-processing logic with the model, we define the model as a
-custom python function model wrapping around the underlying Keras model. The wrapper provides
-necessary preprocessing to convert input data into multidimensional arrays expected by the
-Keras model.
+## Image Classifier with MLflow and Keras
 
 The example contains the following files:
 
@@ -26,10 +17,10 @@ The example contains the following files:
     Score an image using a model
 
 Running this Example
-^^^^^^^^^^^^^^^^^^^^
+
 Install mlflow
 
-    Pip install mlflow
+    pip install mlflow
 
 requires DB as datastore for Model Registry
 
@@ -53,8 +44,6 @@ log results with Mlflow.
 Note, the model name/path is hardcoded in this example, so keep the name the same, and you must promote the model to Production in the MLFlow ui
 
 http://localhost:5000/#/models
-
-.. code-block:: bash
 
       # score the model
       python3 ./score_images.py file:///Users/clayton.gibb/path/to/you/image/flower_images_inference/110472418_87b6a3aa98_m.jpg

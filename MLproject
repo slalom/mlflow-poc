@@ -7,12 +7,12 @@ entry_points:
   main:
     parameters:
       training_data: {type: string, default: "./flower_photos"}
-      epochs: {type: int, default: 2}
+      epochs: {type: int, default: 10}
       image_width: {type: int, default: 180}
       image_height: {type: int, default: 180}
       batch_size: {type: int, default: 16}
       test_ratio: {type: float, default: 0.2}
-      seed: {type: int, default: 97531}
+      seed: {type: int, default: 123}
     command: "python3 train.py --training-data {training_data}
                               --batch-size {batch_size}
                               --epochs {epochs}
